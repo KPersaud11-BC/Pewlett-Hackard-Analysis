@@ -2,7 +2,7 @@
 
 ## Overview of the Pewlett Hackard Analysis
 
-Now that Bobby has proven his SQL chops, his manager has given both of you two more assignments: determine the number of retiring employees per title, and identify employees who are eligible to participate in a mentorship program. Then, you’ll write a report that summarizes your analysis and helps prepare Bobby’s manager for the “silver tsunami” as many current employees reach retirement age.
+Pewlett Hackard is a large company with several thousand employees. With Baby-Boomers retiring, it has tasked its HR group to do two main tasks. First, it wants to know how many of its employees are retirement eligible. Second, it wants to know what positions will become vacant so that it can adequately plan to fill them in the future. Furthermore, I am to determine the number of retiring employees per title, and identify employees who are eligible to participate in a mentorship program.
 
 ## Resources
 - Data Sources: employees.csv, departments.csv, titles.csv, salaries.csv, dept_emp.csv, dept_manager.csv
@@ -11,14 +11,93 @@ Now that Bobby has proven his SQL chops, his manager has given both of you two m
 ## Results
 
 ### Deliverable 1: The Number of Retiring Employees by Title
-Provide a bulleted list with four major points from the two analysis deliverables. Use images as support where needed.
+
+The first deliverable was to create tables that listed all employees who were retirement eligible, and then a final table that has the number of retirement-age employees by their most recent job title. This filtered the employees.csv by those born between 1952 and 1955, and joining it with the titles.csv to determine the employees' titles. By utilizing ```INNER JOIN```, ```DISTINCT ON```, ```ORDER BY```, and ```COUNT()```, I created the following list.
+
+![Retiring Titles](https://user-images.githubusercontent.com/84286467/127759997-ac68724c-e999-4115-a57a-c6b132d90dab.PNG)
+
+The table shows that Pewlett Hackard has 29,414 Senior Engineers and 28,254 Senior Staff employees who are retirement eligible. In total, 90,398 employees could retire. But it begs a question; how much is that compared to Pewlett Hackard's entire workforce? This will be explored in the summary.
 
 ### Deliverable 2: The Employees Eligible for the Mentorship Program
 
+The second deliverable sought to determine how many employees were eligible for the Mentorship program. These were individual 10 years from retirement (aged 55) and could train and advise new hires/promoted employees in their functions. Again, I employed functions like ```INNER JOIN```, ```DISTINCT ON```, ```ORDER BY```, and ```COUNT()``` on the Employees and Department Employees tables. The resulting Mentorship Eligibility Table was exported as a csv and is shown here. 1,549 would be eligible under the
+
+![Mentorship Eligibility](https://user-images.githubusercontent.com/84286467/127760639-468a4645-392b-47aa-8abd-7997dc025c06.PNG)
+
+1,549 Pewlett Hackard employees would be eligible under the current requirements of the Mentorship program. A pivot table of the csv shows that most of the eligible mentors were hired in 1999 and have 21 years in their title. On average, the eligible mentors have 27 years experience.
+
+![Mentorship Pivot](https://user-images.githubusercontent.com/84286467/127760968-049dc661-7e45-4b37-b72f-3b98d4f68800.PNG)
+
 ## Summary
 
-Provide high-level responses to the following questions, then provide two additional queries or tables that may provide more insight into the upcoming "silver tsunami."
+-How many roles will need to be filled as the "silver tsunami" begins to make an impact?
 
-How many roles will need to be filled as the "silver tsunami" begins to make an impact?
+Based on Deliverable 1, 90,398 Pewlett Hackard employees are retirement eligible. If they all decide to retire, all 90,398 positions would need to be filled.
 
-Are there enough qualified, retirement-ready employees in the departments to mentor the next generation of Pewlett Hackard employees?
+-Are there enough qualified, retirement-ready employees in the departments to mentor the next generation of Pewlett Hackard employees?
+
+Based on Deliverable 2, there are only 1,549 eligible employees that could be part of the mentorship program. On a 1-to-1 training basis, this would certainly not be enough to mentor all new hires and promotions.
+
+-Additional questiosn and views:
+
+As mentioned before, while 90,398 retirement eligible employees is a large amount, what is that in comparison to the entire organization? The following table answers that very question.
+
+The following query joined the total employee table with the titles table, and then summarized the count of each title. 
+
+```
+--Total Number of Employees by Title
+SELECT e.emp_no,
+    e.first_name,
+    e.last_name,
+    t.title,
+    t.from_date,
+    t.to_date
+INTO Total_Employees_Titles_Mid
+FROM employees as e
+INNER JOIN titles as t
+ON (e.emp_no = t.emp_no)
+ORDER BY e.emp_no;
+
+-- Use Dictinct with Orderby to remove duplicate rows
+SELECT DISTINCT ON (TETM.emp_no) TETM.emp_no,
+TETM.first_name,
+TETM.last_name,
+TETM.title
+INTO Total_Employees_Titles
+FROM Total_Employees_Titles_Mid as TETM
+ORDER BY TETM.emp_no, TETM.to_date DESC;
+
+--Find Number of each title
+SELECT COUNT(TET.title), TET.title
+INTO Total_Employees_Titles_Count
+FROM Total_Employees_Titles as TET
+GROUP BY TET.title
+ORDER BY COUNT(TET.title) DESC;
+```
+
+Then, using an ```INNER JOIN ``` to the retiring_titles table, it compared the counts of the retiring titles to the total counts, and calculated the percentage. Below is the code and the resulting table.
+
+```
+--Change Column names
+ALTER TABLE Total_Employees_Titles_Count RENAME "count" TO Total_Count;
+ALTER TABLE retiring_titles RENAME "count" TO Retiring_Count;
+
+-- Join Total Count and Retiring Title Count on Title
+SELECT DISTINCT ON (TETC.title) TETC.title,
+    TETC.total_count,
+    rt.retiring_count
+INTO Comparison_table
+FROM Total_Employees_Titles_Count as TETC
+INNER JOIN retiring_titles as rt
+ON (TETC.title = rt.title);
+
+select * from comparison_table
+
+--Calculate Percent Retiring
+Select *, round(((retiring_count*1.00/total_count) * 100),1) as "%Retiring"
+From Comparison_table;
+```
+
+![Comparison Table](https://user-images.githubusercontent.com/84286467/127761261-28956416-6906-420c-9cf6-c2146cd2d487.PNG)
+
+We see that in all cases, except for Manager, Pewlett Hackard could lose approximately 30% of its workforce. This would be devastating for their operations, and would require aggressive hiring.
