@@ -30,15 +30,15 @@ The second deliverable sought to determine how many employees were eligible for 
 
 ## Summary
 
--How many roles will need to be filled as the "silver tsunami" begins to make an impact?
+- **How many roles will need to be filled as the "silver tsunami" begins to make an impact?**
 
 Based on Deliverable 1, 90,398 Pewlett Hackard employees are retirement eligible. If they all decide to retire, all 90,398 positions would need to be filled.
 
--Are there enough qualified, retirement-ready employees in the departments to mentor the next generation of Pewlett Hackard employees?
+- **Are there enough qualified, retirement-ready employees in the departments to mentor the next generation of Pewlett Hackard employees?**
 
 Based on Deliverable 2, there are only 1,549 eligible employees that could be part of the mentorship program. On a 1-to-1 training basis, this would certainly not be enough to mentor all new hires and promotions.
 
--Additional questions and views:
+- **Additional questions and views:**
 
 As mentioned before, while 90,398 retirement eligible employees is a large amount, what is that in comparison to the entire organization? The following table answers that very question.
 
