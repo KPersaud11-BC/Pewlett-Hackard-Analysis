@@ -101,3 +101,34 @@ From Comparison_table;
 ![Comparison Table](https://user-images.githubusercontent.com/84286467/127761261-28956416-6906-420c-9cf6-c2146cd2d487.PNG)
 
 We see that in all cases, except for Manager, Pewlett Hackard could lose approximately 30% of its workforce. This would be devastating for their operations, and would require aggressive hiring.
+
+Second, I stated that a 1-to-1 Mentoring model would not be possible given the number of eligible mentors. The following code examined how many mentees would each mentor have if all vacancies from retirement-eligible employees needed to be filled and all mentorship-eligible employees agreed to mentor.
+
+```
+--Calculate how many employees the eligible mentors would have to advise
+ALTER TABLE Mentorship_eligibility_count RENAME "count" TO Mentor_Count;
+
+SELECT CT.title,
+CT.total_count,
+CT.retiring_count,
+MEC.mentor_count
+INTO Mentor_Comparison
+FROM Comparison_table as CT
+INNER JOIN Mentorship_eligibility_count as MEC
+ON (CT.title = MEC.title);
+
+Select *, round(((retiring_count*1.00/mentor_count)),0) as "Employees per Mentor"
+From Mentor_Comparison;
+```
+
+![Employees Per Mentor](https://user-images.githubusercontent.com/84286467/127761393-f0000f38-6ea4-4956-8f24-af098bfc978b.PNG)
+
+The table shows that Senior Staff and Senior Engineers would need to mentor significantly higher promoted employees than other titles.
+
+## Conclusion
+In summary, Pewlett Hackard should take the following points and recommendations from this analysis,
+- Approximately 30% of its workforce is retirement-eligible. If they all chose to retire, over 90,000 employees would leave.
+- Pewlett Hackard should begin working on an aggressive hiring plan to fill these vacancies, or determine if only a portion will be filled.
+- It does not have enough eligible mentors to adequetely advise new hires/promotions.
+- Even if Pewlett Hackard were to divide up the employees among the mentors, Senior Staff and Senior Engineers would have significantly larger loads.
+- As such, Pewlett Hackard may need to expand the age range of its mentorship program, or hire training staff to adequately mentor senior engineers and senior staff.
