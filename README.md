@@ -38,7 +38,7 @@ Based on Deliverable 1, 90,398 Pewlett Hackard employees are retirement eligible
 
 Based on Deliverable 2, there are only 1,549 eligible employees that could be part of the mentorship program. On a 1-to-1 training basis, this would certainly not be enough to mentor all new hires and promotions.
 
--Additional questiosn and views:
+-Additional questions and views:
 
 As mentioned before, while 90,398 retirement eligible employees is a large amount, what is that in comparison to the entire organization? The following table answers that very question.
 
