@@ -10,7 +10,10 @@ Now that Bobby has proven his SQL chops, his manager has given both of you two m
 
 ## Results
 
+### Deliverable 1: The Number of Retiring Employees by Title
 Provide a bulleted list with four major points from the two analysis deliverables. Use images as support where needed.
+
+### Deliverable 2: The Employees Eligible for the Mentorship Program
 
 ## Summary
 
